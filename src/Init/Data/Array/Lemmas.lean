@@ -528,7 +528,7 @@ theorem get!_eq_getD [Inhabited α] (a : Array α) : a.get! n = a.getD n default
   by_cases p : i < a.size <;>
   simp only [get!_eq_getD, getD_eq_get?, getD_get?, p, get?_eq_getElem?]
 
-/-! # set -/
+ # set -/
 
 @[simp] theorem getElem_set_eq (a : Array α) (i : Nat) (h : i < a.size) (v : α) {j : Nat}
       (eq : i = j) (p : j < (a.set i v).size) :
@@ -552,7 +552,7 @@ theorem getElem_set (a : Array α) (i : Nat) (h' : i < a.size) (v : α) (j : Nat
     (ne : i ≠ j) : (a.set i v)[j]? = a[j]? := by
   by_cases h : j < a.size <;> simp [getElem?_lt, getElem?_ge, Nat.ge_of_not_lt, ne, h]
 
-/-! # setD -/
+ # setD -/
 
 @[simp] theorem set!_is_setD : @set! = @setD := rfl
 
@@ -578,7 +578,7 @@ theorem getElem?_setD_eq (a : Array α) {i : Nat} (p : i < a.size) (v : α) : (a
   by_cases h : i < a.size <;>
     simp [setD, Nat.not_lt_of_le, h,  getD_get?]
 
-/-! # ofFn -/
+ # ofFn -/
 
 @[simp] theorem size_ofFn_go {n} (f : Fin n → α) (i acc) :
     (ofFn.go f i acc).size = acc.size + (n - i) := by
@@ -621,7 +621,7 @@ theorem getElem?_ofFn (f : Fin n → α) (i : Nat) :
     (ofFn f)[i]? = if h : i < n then some (f ⟨i, h⟩) else none := by
   simp [getElem?_def]
 
-/-- # mkArray -/
+ # mkArray -/
 
 @[simp] theorem size_mkArray (n : Nat) (v : α) : (mkArray n v).size = n :=
   List.length_replicate ..
@@ -637,7 +637,7 @@ theorem getElem?_mkArray (n : Nat) (v : α) (i : Nat) :
     (mkArray n v)[i]? = if i < n then some v else none := by
   simp [getElem?_def]
 
-/-- # mem -/
+ # mem -/
 
 @[simp] theorem mem_toList {a : α} {l : Array α} : a ∈ l.toList ↔ a ∈ l := mem_def.symm
 
@@ -659,7 +659,7 @@ theorem not_mem_nil (a : α) : ¬ a ∈ #[] := nofun
     (x ∈ if p then l else #[]) ↔ p ∧ x ∈ l := by
   split <;> simp_all
 
-/-- # get lemmas -/
+ # get lemmas -/
 
 theorem lt_of_getElem {x : α} {a : Array α} {idx : Nat} {hidx : idx < a.size} (_ : a[idx] = x) :
     idx < a.size :=
@@ -896,7 +896,7 @@ theorem getElem_range {n : Nat} {x : Nat} (h : x < (Array.range n).size) : (Arra
         true_and, Nat.not_lt] at h
       rw [List.getElem?_eq_none_iff.2 ‹_›, List.getElem?_eq_none_iff.2 (a.toList.length_reverse ▸ ‹_›)]
 
-/-! ### BEq -/
+ ### BEq -/
 
 @[simp] theorem reflBEq_iff [BEq α] : ReflBEq (Array α) ↔ ReflBEq α := by
   constructor
