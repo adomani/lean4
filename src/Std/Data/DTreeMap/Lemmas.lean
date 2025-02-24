@@ -335,7 +335,8 @@ theorem get_erase [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} {h'} :
     (t.erase k).get a h' = t.get a (contains_of_contains_erase h') :=
   Impl.get_erase t.wf
 
-theorem get?_eq_some_get [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {h'} : t.get? a = some (t.get a h') :=
+theorem get?_eq_some_get [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {h'} :
+    t.get? a = some (t.get a h') :=
   Impl.get?_eq_some_get t.wf
 
 namespace Const
@@ -370,8 +371,8 @@ theorem get_congr [TransCmp cmp] {a b : α} (hab : cmp a b = .eq) {h'} :
 
 end Const
 
-theorem get!_empty [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
-    get! (empty : DTreeMap α β cmp) a = default :=
+theorem get!_emptyc [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
+    get! (∅ : DTreeMap α β cmp) a = default :=
   Impl.get!_empty
 
 theorem get!_of_isEmpty [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
@@ -387,8 +388,12 @@ theorem get!_insert_self [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (�
     (t.insert a b).get! a = b :=
   Impl.get!_insert_self t.wf
 
+theorem get!_eq_default_of_contains_eq_false [TransCmp cmp] [LawfulEqCmp cmp] {a : α}
+    [Inhabited (β a)] : t.contains a = false → t.get! a = default :=
+  Impl.get!_eq_default_of_contains_eq_false t.wf
+
 theorem get!_eq_default [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
-    t.contains a = false → t.get! a = default :=
+    ¬ a ∈ t → t.get! a = default :=
   Impl.get!_eq_default t.wf
 
 theorem get!_erase [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} [Inhabited (β a)] :
@@ -399,8 +404,12 @@ theorem get!_erase_self [TransCmp cmp] [LawfulEqCmp cmp] {k : α} [Inhabited (β
     (t.erase k).get! k = default :=
   Impl.get!_erase_self t.wf
 
-theorem get?_eq_some_get! [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
+theorem get?_eq_some_get!_of_contains [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
     t.contains a = true → t.get? a = some (t.get! a) :=
+  Impl.get?_eq_some_get!_of_contains t.wf
+
+theorem get?_eq_some_get! [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
+    a ∈ t → t.get? a = some (t.get! a) :=
   Impl.get?_eq_some_get! t.wf
 
 theorem get!_eq_get!_get? [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
@@ -415,8 +424,8 @@ namespace Const
 
 variable {β : Type v} (t : DTreeMap α β cmp)
 
-theorem get!_empty [TransCmp cmp] [Inhabited β] {a : α} :
-    get! (empty : DTreeMap α β cmp) a = default :=
+theorem get!_emptyc [TransCmp cmp] [Inhabited β] {a : α} :
+    get! (∅ : DTreeMap α β cmp) a = default :=
   Impl.Const.get!_empty
 
 theorem get!_of_isEmpty [TransCmp cmp] [Inhabited β] {a : α} :
@@ -431,8 +440,12 @@ theorem get!_insert_self [TransCmp cmp] [Inhabited β] {k : α}
     {v : β} : get! (t.insert k v) k = v :=
   Impl.Const.get!_insert_self t.wf
 
-theorem get!_eq_default [TransCmp cmp] [Inhabited β] {a : α} :
+theorem get!_eq_default_of_contains_eq_false [TransCmp cmp] [Inhabited β] {a : α} :
     t.contains a = false → get! t a = default :=
+  Impl.Const.get!_eq_default_of_contains_eq_false t.wf
+
+theorem get!_eq_default [TransCmp cmp] [Inhabited β] {a : α} :
+    ¬ a ∈ t → get! t a = default :=
   Impl.Const.get!_eq_default t.wf
 
 theorem get!_erase [TransCmp cmp] [Inhabited β] {k a : α} :
@@ -443,8 +456,12 @@ theorem get!_erase_self [TransCmp cmp] [Inhabited β] {k : α} :
     get! (t.erase k) k = default :=
   Impl.Const.get!_erase_self t.wf
 
-theorem get?_eq_some_get! [TransCmp cmp] [Inhabited β] {a : α} :
+theorem get?_eq_some_get!_of_contains [TransCmp cmp] [Inhabited β] {a : α} :
     t.contains a = true → get? t a = some (get! t a) :=
+  Impl.Const.get?_eq_some_get! t.wf
+
+theorem get?_eq_some_get! [TransCmp cmp] [Inhabited β] {a : α} :
+    a ∈ t → get? t a = some (get! t a) :=
   Impl.Const.get?_eq_some_get! t.wf
 
 theorem get!_eq_get!_get? [TransCmp cmp] [Inhabited β] {a : α} :
@@ -465,8 +482,8 @@ theorem get!_congr [TransCmp cmp] [Inhabited β] {a b : α}
 
 end Const
 
-theorem getD_empty [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
-    (empty : DTreeMap α β cmp).getD a fallback = fallback :=
+theorem getD_emptyc [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
+    (∅ : DTreeMap α β cmp).getD a fallback = fallback :=
   Impl.getD_empty
 
 theorem getD_of_isEmpty [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} : t.isEmpty = true → t.getD a fallback = fallback :=
@@ -483,8 +500,12 @@ theorem getD_insert_self [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback b :
     (t.insert a b).getD a fallback = b :=
   Impl.getD_insert_self t.wf
 
-theorem getD_eq_fallback [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
+theorem getD_eq_fallback_of_contains_eq_false [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
     t.contains a = false → t.getD a fallback = fallback :=
+  Impl.getD_eq_fallback_of_contains_eq_false t.wf
+
+theorem getD_eq_fallback [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
+    ¬ a ∈ t → t.getD a fallback = fallback :=
   Impl.getD_eq_fallback t.wf
 
 theorem getD_erase [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} {fallback : β a} :
@@ -495,8 +516,12 @@ theorem getD_erase_self [TransCmp cmp] [LawfulEqCmp cmp] {k : α} {fallback : β
     (t.erase k).getD k fallback = fallback :=
   Impl.getD_erase_self t.wf
 
-theorem get?_eq_some_getD [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
+theorem get?_eq_some_getD_of_contains [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
     t.contains a = true → t.get? a = some (t.getD a fallback) :=
+  Impl.get?_eq_some_getD_of_contains t.wf
+
+theorem get?_eq_some_getD [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
+    a ∈ t → t.get? a = some (t.getD a fallback) :=
   Impl.get?_eq_some_getD t.wf
 
 theorem getD_eq_getD_get? [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
@@ -531,8 +556,12 @@ theorem getD_insert_self [TransCmp cmp] {k : α} {fallback v : β} :
     getD (t.insert k v) k fallback = v :=
   Impl.Const.getD_insert_self t.wf
 
-theorem getD_eq_fallback [TransCmp cmp] {a : α} {fallback : β} :
+theorem getD_eq_fallback_of_contains_eq_false [TransCmp cmp] {a : α} {fallback : β} :
     t.contains a = false → getD t a fallback = fallback :=
+  Impl.Const.getD_eq_fallback_of_contains_eq_false t.wf
+
+theorem getD_eq_fallback [TransCmp cmp] {a : α} {fallback : β} :
+    ¬ a ∈ t → getD t a fallback = fallback :=
   Impl.Const.getD_eq_fallback t.wf
 
 theorem getD_erase [TransCmp cmp] {k a : α} {fallback : β} :
@@ -546,8 +575,12 @@ theorem getD_erase_self [TransCmp cmp] {k : α} {fallback : β} :
     getD (t.erase k) k fallback = fallback :=
   Impl.Const.getD_erase_self t.wf
 
-theorem get?_eq_some_getD [TransCmp cmp] {a : α} {fallback : β} :
+theorem get?_eq_some_getD_of_contains [TransCmp cmp] {a : α} {fallback : β} :
     t.contains a = true → get? t a = some (getD t a fallback) :=
+  Impl.Const.get?_eq_some_getD_of_contains t.wf
+
+theorem get?_eq_some_getD [TransCmp cmp] {a : α} {fallback : β} :
+    a ∈ t → get? t a = some (getD t a fallback) :=
   Impl.Const.get?_eq_some_getD t.wf
 
 theorem getD_eq_getD_get? [TransCmp cmp] {a : α} {fallback : β} :
