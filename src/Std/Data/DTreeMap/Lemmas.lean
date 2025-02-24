@@ -326,6 +326,7 @@ theorem get_insert [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} {v : β k} {h₁}
         t.get a (contains_of_contains_insert h₁ h₂) :=
   Impl.get_insert t.wf
 
+@[simp]
 theorem get_insert_self [TransCmp cmp] [LawfulEqCmp cmp] {k : α} {v : β k} :
     (t.insert k v).get k contains_insert_self = v :=
   Impl.get_insert_self t.wf
@@ -349,6 +350,7 @@ theorem get_insert [TransCmp cmp] {k a : α} {v : β} {h₁} :
       else get t a (contains_of_contains_insert h₁ h₂) :=
   Impl.Const.get_insert t.wf
 
+@[simp]
 theorem get_insert_self [TransCmp cmp] {k : α} {v : β} :
     get (t.insert k v) k (contains_insert_self) = v :=
   Impl.Const.get_insert_self t.wf
@@ -371,6 +373,7 @@ theorem get_congr [TransCmp cmp] {a b : α} (hab : cmp a b = .eq) {h'} :
 
 end Const
 
+@[simp]
 theorem get!_emptyc [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] :
     get! (∅ : DTreeMap α β cmp) a = default :=
   Impl.get!_empty
@@ -384,6 +387,7 @@ theorem get!_insert [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} [Inhabited (β a
       if h : cmp k a = .eq then cast (congrArg β (compare_eq_iff_eq.mp h)) v else t.get! a :=
   Impl.get!_insert t.wf
 
+@[simp]
 theorem get!_insert_self [TransCmp cmp] [LawfulEqCmp cmp] {a : α} [Inhabited (β a)] {b : β a} :
     (t.insert a b).get! a = b :=
   Impl.get!_insert_self t.wf
@@ -400,6 +404,7 @@ theorem get!_erase [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} [Inhabited (β a)
     (t.erase k).get! a = if cmp k a = .eq then default else t.get! a :=
   Impl.get!_erase t.wf
 
+@[simp]
 theorem get!_erase_self [TransCmp cmp] [LawfulEqCmp cmp] {k : α} [Inhabited (β k)] :
     (t.erase k).get! k = default :=
   Impl.get!_erase_self t.wf
@@ -424,6 +429,7 @@ namespace Const
 
 variable {β : Type v} (t : DTreeMap α β cmp)
 
+@[simp]
 theorem get!_emptyc [TransCmp cmp] [Inhabited β] {a : α} :
     get! (∅ : DTreeMap α β cmp) a = default :=
   Impl.Const.get!_empty
@@ -436,6 +442,7 @@ theorem get!_insert [TransCmp cmp] [Inhabited β] {k a : α} {v : β} :
     get! (t.insert k v) a = if cmp k a = .eq then v else get! t a :=
   Impl.Const.get!_insert t.wf
 
+@[simp]
 theorem get!_insert_self [TransCmp cmp] [Inhabited β] {k : α}
     {v : β} : get! (t.insert k v) k = v :=
   Impl.Const.get!_insert_self t.wf
@@ -452,6 +459,7 @@ theorem get!_erase [TransCmp cmp] [Inhabited β] {k a : α} :
     get! (t.erase k) a = if cmp k a = .eq then default else get! t a :=
   Impl.Const.get!_erase t.wf
 
+@[simp]
 theorem get!_erase_self [TransCmp cmp] [Inhabited β] {k : α} :
     get! (t.erase k) k = default :=
   Impl.Const.get!_erase_self t.wf
@@ -482,6 +490,7 @@ theorem get!_congr [TransCmp cmp] [Inhabited β] {a b : α}
 
 end Const
 
+@[simp]
 theorem getD_emptyc [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback : β a} :
     (∅ : DTreeMap α β cmp).getD a fallback = fallback :=
   Impl.getD_empty
@@ -496,6 +505,7 @@ theorem getD_insert [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} {fallback : β a
       else t.getD a fallback :=
   Impl.getD_insert t.wf
 
+@[simp]
 theorem getD_insert_self [TransCmp cmp] [LawfulEqCmp cmp] {a : α} {fallback b : β a} :
     (t.insert a b).getD a fallback = b :=
   Impl.getD_insert_self t.wf
@@ -512,6 +522,7 @@ theorem getD_erase [TransCmp cmp] [LawfulEqCmp cmp] {k a : α} {fallback : β a}
     (t.erase k).getD a fallback = if cmp k a = .eq then fallback else t.getD a fallback :=
   Impl.getD_erase t.wf
 
+@[simp]
 theorem getD_erase_self [TransCmp cmp] [LawfulEqCmp cmp] {k : α} {fallback : β k} :
     (t.erase k).getD k fallback = fallback :=
   Impl.getD_erase_self t.wf
@@ -540,6 +551,7 @@ namespace Const
 
 variable {β : Type v} (t : DTreeMap α β cmp)
 
+@[simp]
 theorem getD_empty [TransCmp cmp] {a : α} {fallback : β} :
     getD (empty : DTreeMap α β cmp) a fallback = fallback :=
   Impl.Const.getD_empty
@@ -552,6 +564,7 @@ theorem getD_insert [TransCmp cmp] {k a : α} {fallback v : β} :
     getD (t.insert k v) a fallback = if cmp k a = .eq then v else getD t a fallback :=
   Impl.Const.getD_insert t.wf
 
+@[simp]
 theorem getD_insert_self [TransCmp cmp] {k : α} {fallback v : β} :
     getD (t.insert k v) k fallback = v :=
   Impl.Const.getD_insert_self t.wf
@@ -571,6 +584,7 @@ theorem getD_erase [TransCmp cmp] {k a : α} {fallback : β} :
       getD t a fallback :=
   Impl.Const.getD_erase t.wf
 
+@[simp]
 theorem getD_erase_self [TransCmp cmp] {k : α} {fallback : β} :
     getD (t.erase k) k fallback = fallback :=
   Impl.Const.getD_erase_self t.wf
